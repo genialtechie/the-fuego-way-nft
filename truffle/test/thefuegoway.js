@@ -1,6 +1,6 @@
-// const NftContract = artifacts.require("TheUnitedWay");
+// const NftContract = artifacts.require("TheFuegoWay");
 
-// contract('TheUnitedWay', () => {
+// contract('TheFuegoWay', () => {
 //   it('should read contract info', async() => {
 //     const instance = await NftContract.deployed();
 //   });

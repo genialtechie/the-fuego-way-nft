@@ -1,5 +1,5 @@
-const TheUnitedWay = artifacts.require("TheUnitedWay");
+const TheFuegoWay = artifacts.require("TheFuegoWay");
 
 module.exports = function (deployer) {
-  deployer.deploy(TheUnitedWay);
+  deployer.deploy(TheFuegoWay);
 };

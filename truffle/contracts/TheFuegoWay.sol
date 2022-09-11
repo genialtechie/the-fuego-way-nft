@@ -6,15 +6,15 @@ import "@openzeppelin/contracts/security/Pausable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 
-contract TheUnitedWay is ERC721, Pausable, Ownable {
+contract TheFuegoWay is ERC721, Pausable, Ownable {
     using Counters for Counters.Counter;
 
     Counters.Counter private _tokenIdCounter;
 
-    constructor() ERC721("The United Way", "UTDW") {}
+    constructor() ERC721("The Fuego Way", "TFW") {}
 
     function _baseURI() internal pure override returns (string memory) {
-        return "ipfs//QmZrXvendAy8NQsKTcrWKSVbucSG3xQi3QRH5fBDZgYCMF";
+        return "ipfs://QmdkKnWMHcwMaifQrWsq8vr4D7hbWd54eHZKazqBW1YpuY/";
     }
 
     function pause() public onlyOwner {
