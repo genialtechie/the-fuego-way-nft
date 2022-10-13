@@ -4,7 +4,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  text-align: center;
   font-size: 1.6rem;
+  position: relative;
 }
 
 #App .container {
@@ -12,4 +14,53 @@
   min-width: 60rem;
   max-width: 75rem;
   height: 100%;
+}
+nav,
+nav > div {
+  width: auto;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  font-size: 0.8rem;
+  color: gray;
+  font-style: italic;
+  margin: 10px;
+  position: absolute;
+  top: 0%;
+  right: 5%;
+}
+nav .btn {
+  font-size: 1.5rem;
+  margin-left: 20px;
+}
+nav > div p {
+  padding-right: 20px;
+  border-right: 2px solid black;
+}
+header {
+  padding: 1rem 0;
+}
+.header {
+  padding: 1rem 0;
+  font-size: 6rem;
+  font-weight: bolder;
+}
+.subheader {
+  font-size: 2rem;
+  font-style: italic;
+  font-weight: 400;
+}
+.btn {
+  margin: 1rem 0;
+  padding: 1rem 2rem;
+  font-size: 2rem;
+  font-weight: 400;
+  border: 0.2rem solid #000;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn:hover {
+  background-color: #000;
+  color: #fff;
 }
