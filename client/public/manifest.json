@@ -1,21 +1,21 @@
 {
-  "short_name": "Truffle Box",
-  "name": "React Truffle Box",
+  "short_name": "TFW NFT",
+  "name": "The Fuego Way NFT",
   "icons": [
     {
       "src": "favicon.ico",
-      "sizes": "64x64 32x32 24x24 16x16",
+      "sizes": "50x42",
       "type": "image/x-icon"
     },
     {
       "src": "logo192.png",
       "type": "image/png",
-      "sizes": "192x192"
+      "sizes": "150x126"
     },
     {
       "src": "logo512.png",
       "type": "image/png",
-      "sizes": "512x512"
+      "sizes": "300x253"
     }
   ],
   "start_url": ".",

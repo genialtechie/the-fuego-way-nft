@@ -21,7 +21,7 @@ nav > div {
   display: flex;
   flex-direction: row;
   align-items: center;
-  font-size: 0.8rem;
+  font-size: 1rem;
   color: gray;
   font-style: italic;
   margin: 10px;
@@ -34,6 +34,8 @@ nav .btn {
   margin-left: 20px;
 }
 nav > div p {
+  font-family: sans-serif;
+  font-weight: 400;
   padding-right: 20px;
   border-right: 2px solid black;
 }
@@ -63,4 +65,12 @@ header {
 .btn:hover {
   background-color: #000;
   color: #fff;
+}
+.after-mint {
+  font-family: sans-serif;
+  margin-top: 2rem;
+  font-size: 1.5rem;
+  font-weight: 400;
+  font-style: italic;
+  color: gray;
 }

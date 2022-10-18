@@ -1,73 +1,65 @@
-import React, { useState, useEffect } from 'react';
-import Web3 from 'web3';
-import Web3Modal from 'web3modal';
-import { providerOptions } from '../contexts/EthContext/EthProvider';
+import React from 'react';
 import { actions, useEth } from '../contexts/EthContext';
+import { abi, networks } from '../contracts/TheFuegoWay.json';
+import {
+  useConnectModal,
+  useAccount,
+  useContract,
+  useDisconnect,
+  useNetwork,
+  useContractWrite,
+  useWaitForTransaction,
+} from '@web3modal/react';
 
 const HomePage = () => {
-  //get the state and dispatch from the EthContext
-  const {
-    // eslint-disable-next-line no-unused-vars
-    state: { artifact, web3, accounts, contract },
-    dispatch,
-  } = useEth();
-  const [web3Modal, setWeb3Modal] = useState(null);
+  //get the dispatch from the EthContext in order to update the state
+  const { dispatch } = useEth();
+  const { open } = useConnectModal();
+  const { address, isConnected } = useAccount();
+  const disconnect = useDisconnect();
+  const { chain } = useNetwork();
+  const contractAddress = networks[5].address;
 
-  useEffect(() => {
-    // initialize web3modal
-    const newWeb3Modal = new Web3Modal({
-      network: 'goerli',
-      cacheProvider: true,
-      providerOptions,
-    });
-    setWeb3Modal(newWeb3Modal);
-    // get cached provider and connect if available
-    if (web3Modal && web3Modal.cachedProvider) {
-      connectWallet();
-    }
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  //get the contract instance
+  const contract = useContract({
+    addressOrName: contractAddress,
+    contractInterface: abi,
+  });
+
+  // set up the contract write function
+  const config = {
+    addressOrName: contractAddress,
+    contractInterface: abi,
+    functionName: 'mint',
+    chainId: 5,
+    args: address,
+  };
+
+  const { data, error, write } = useContractWrite(config);
+  const { receipt, isWaiting } = useWaitForTransaction({ hash: data?.hash });
 
   const connectWallet = async () => {
-    // Connect to a wallet using web3modal
-    const artifact = require('../contracts/TheFuegoWay.json');
-    const provider = await web3Modal.connect();
-    const web3 = new Web3(provider);
-    const accounts = await web3.eth.requestAccounts();
-    const networkID = await web3.eth.net.getId();
-    const { abi } = artifact;
-    // Create a contract instance with the artifact's ABI and the connected network's address
-    let address, contract;
-    try {
-      address = artifact.networks[networkID].address;
-      contract = new web3.eth.Contract(abi, address);
-    } catch (err) {
-      console.error(err);
-    }
+    open();
     // Update the state with the values from the connected wallet
     dispatch({
       type: actions.init,
-      data: { artifact, web3, accounts, networkID, contract },
+      data: { artifact: abi, accounts: address, contract },
     });
-  };
-
-  const disconnectWallet = async () => {
-    // Disconnect from the connected wallet
-    await web3Modal.clearCachedProvider();
-    window.location.reload();
   };
 
   return (
     <div>
       <nav>
-        {accounts ? (
+        {isConnected ? (
           // If the user is connected, display their address
           <div>
             <p>
-              Connected with <br /> {accounts[0]}
+              Connected to {chain.name} with
+              <br /> {address}
             </p>
             <button
               className="btn"
-              onClick={disconnectWallet}
+              onClick={() => disconnect()}
             >
               Disconnect
             </button>
@@ -95,7 +87,20 @@ const HomePage = () => {
         <h2 className="subheader">The Fuego Way is a way of being.</h2>
         <h2 className="subheader">The Fuego Way is a way of life.</h2>
       </header>
-      {!accounts ? (
+      {isConnected ? (
+        // if accounts, show mint button
+        <button
+          className="btn mint"
+          onClick={() => {
+            write().then(() => {
+              if (error) console.log(error);
+              if (receipt) console.log(receipt);
+            });
+          }}
+        >
+          Mint
+        </button>
+      ) : (
         // if no accounts, show connect wallet button
         <button
           className="btn connect-wallet"
@@ -103,17 +108,16 @@ const HomePage = () => {
         >
           Connect Wallet
         </button>
-      ) : (
-        // if accounts, show mint button
-        <button
-          className="btn mint"
-          onClick={async () =>
-            await contract.methods.mint(accounts[0]).send({ from: accounts[0] })
-          }
-        >
-          Mint
-        </button>
       )}
+      <div className="after-mint">
+        {isWaiting && (
+          <div>
+            <p>Waiting for transaction to be mined...</p>
+          </div>
+        )}
+        {receipt && <p>Transaction mined!</p>}
+        {error && <p>Transaction failed!</p>}
+      </div>
     </div>
   );
 };
